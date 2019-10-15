@@ -6,16 +6,16 @@ ManagersInv::ManagersInv()
     enableRestriction("RestModif");
     enableCommentaire("Commentaire","CbCommentaire");
     enableDonnee("Donnee","ArbDonnee","CbDonnee","CardDonnee",
-                 new GestionAutorisationCible<Donnee,Restriction>(bdd::cibleId::Donnee,get<Restriction>()),
-                 new GestionAutorisationCible<CibleDonnee,Restriction>(bdd::cibleId::CibleDonnee,get<Restriction>()),
-                 new GestionAutorisationCible<DonneeCard,Restriction>(bdd::cibleId::DonneeCard,get<Restriction>()));
+                 new GestionAutorisationCibleCode<Donnee,Restriction>(bdd::cibleId::Donnee,get<Restriction>()),
+                 new GestionAutorisationCibleCode<CibleDonnee,Restriction>(bdd::cibleId::CibleDonnee,get<Restriction>()),
+                 new GestionAutorisationCibleCode<DonneeCard,Restriction>(bdd::cibleId::DonneeCard,get<Restriction>()));
     enableHistorique("Historique");
     enableMotCle("MotCle","ArbMotCle","CbMotCle","PermMotCle",
-                 new GestionAutorisationCible<MotCle,Restriction>(bdd::cibleId::MotCle,get<Restriction>()),
-                 new GestionAutorisationCible<MotClePermission,Restriction>(bdd::cibleId::MotClePermission,get<Restriction>()));
+                 new GestionAutorisationCibleCode<MotCle,Restriction>(bdd::cibleId::MotCle,get<Restriction>()),
+                 new GestionAutorisationCibleCode<MotClePermission,Restriction>(bdd::cibleId::MotClePermission,get<Restriction>()));
     enableType("Type","PermType",
-               new GestionAutorisationCible<Type,Restriction>(bdd::cibleId::Type,get<Restriction>()),
-               new GestionAutorisationCible<TypePermission,Restriction>(bdd::cibleId::TypePermission,get<Restriction>()));
+               new GestionAutorisationCibleCode<Type,Restriction>(bdd::cibleId::Type,get<Restriction>()),
+               new GestionAutorisationCibleCode<TypePermission,Restriction>(bdd::cibleId::TypePermission,get<Restriction>()));
 
     //Acquisition
     using UniqueAc = NomUniqueSql<Acquisition>;
@@ -38,7 +38,7 @@ ManagersInv::ManagersInv()
     infoCol.setUnique(Collection::Nom,UniqueCol::NomUnique);
     infoCol.setForeignKey(Collection::Id,infoArbCol);
     setManager(new ManagerOfArbreModifControle<Collection>(infoCol,infoArbCol,
-               new GestionAutorisationCible<Collection,Restriction>(0,get<Restriction>()),
+               new GestionAutorisationCibleCode<Collection,Restriction>(0,get<Restriction>()),
                new UniqueCol));
     setCible<Collection>(bdd::cibleId::Collection);
 
@@ -54,7 +54,7 @@ ManagersInv::ManagersInv()
     infoEt.setUnique(Etat::Nom,UniqueEt::NomUnique,UniqueEt::NomUniqueSet);
     infoEt.setForeignKey(Etat::Id,infoArbEt);
     setManager(new ManagerOfArbreModifControle<Etat>(infoEt,infoArbEt,
-               new GestionAutorisationCible<Etat,Restriction>(0,get<Restriction>()),
+               new GestionAutorisationCibleCode<Etat,Restriction>(0,get<Restriction>()),
                new UniqueEt));
     setCible<Etat>(bdd::cibleId::Etat);
 
@@ -85,27 +85,27 @@ ManagersInv::ManagersInv()
     //Composition
     using UniqueComp = IdNumUniqueSql<Composition>;
     InfoBdd infoComp("Composition",Composition::NbrAtt,{UniqueComp::NbrUnique});
-    infoComp.setAttribut(Composition::IdCol,"idCol");
-    infoComp.setAttribut(Composition::IdIng,"idIng");
+    infoComp.setAttribut(Composition::IdCollection,"idCol");
+    infoComp.setAttribut(Composition::IdIngredient,"idIng");
     infoComp.setAttribut(Composition::Num,"num");
     infoComp.setAttribut(Composition::Type,"tp");
     infoComp.setAttribut(Composition::Valeur,"val",bdd::TypeAttributBdd::Double,false);
-    infoComp.setUnique(Composition::IdCol,UniqueComp::Id1Unique);
+    infoComp.setUnique(Composition::IdCollection,UniqueComp::Id1Unique);
     infoComp.setUnique(Composition::Num,UniqueComp::NumUnique);
-    infoComp.setForeignKey(Composition::IdCol,infoCol);
-    infoComp.setForeignKey(Composition::IdIng,infoIng);
+    infoComp.setForeignKey(Composition::IdCollection,infoCol);
+    infoComp.setForeignKey(Composition::IdIngredient,infoIng);
     setManager(new ManagerSql<Composition>(infoComp, new UniqueComp));
     setCible<Composition>(bdd::cibleId::Composition);
 
     //Origine
     using UniqueOrg = IdTypeUniqueSql<Origine>;
     InfoBdd infoOrg("Origine",Origine::NbrAtt,{UniqueOrg::NbrUnique});
-    infoOrg.setAttribut(Origine::IdCol,"idCol");
+    infoOrg.setAttribut(Origine::IdCollection,"idCol");
     infoOrg.setAttribut(Origine::IdGeo,"idGeo");
     infoOrg.setAttribut(Origine::Type,"tp");
-    infoOrg.setUnique(Origine::IdCol,UniqueOrg::Id1Unique);
+    infoOrg.setUnique(Origine::IdCollection,UniqueOrg::Id1Unique);
     infoOrg.setUnique(Origine::Type,UniqueOrg::TypeUnique);
-    infoOrg.setForeignKey(Origine::IdCol,infoCol);
+    infoOrg.setForeignKey(Origine::IdCollection,infoCol);
     infoOrg.setForeignKey(Origine::IdGeo,infoGeo);
     setManager(new ManagerSql<Origine>(infoOrg, new UniqueOrg));
     setCible<Origine>(bdd::cibleId::Origine);
@@ -113,14 +113,14 @@ ManagersInv::ManagersInv()
     //Element
     using UniqueEl = IdNumUniqueSql<Element>;
     InfoBdd infoEl("Element",Element::NbrAtt,{UniqueEl::NbrUnique});
-    infoEl.setAttribut(Element::IdCol,"idCol");
-    infoEl.setAttribut(Element::IdAcq,"idAcq");
+    infoEl.setAttribut(Element::IdCollection,"idCol");
+    infoEl.setAttribut(Element::IdAcquisition,"idAcq");
     infoEl.setAttribut(Element::IdEtat,"idEt");
     infoEl.setAttribut(Element::Num,"num");
-    infoEl.setUnique(Element::IdCol,UniqueEl::Id1Unique);
+    infoEl.setUnique(Element::IdCollection,UniqueEl::Id1Unique);
     infoEl.setUnique(Element::Num,UniqueEl::NumUnique);
-    infoEl.setForeignKey(Element::IdAcq,infoAc);
-    infoEl.setForeignKey(Element::IdCol,infoCol);
+    infoEl.setForeignKey(Element::IdAcquisition,infoAc);
+    infoEl.setForeignKey(Element::IdCollection,infoCol);
     infoEl.setForeignKey(Element::IdEtat,infoEt);
     setManager(new ManagerSql<Element>(infoEl, new UniqueEl));
     setCible<Element>(bdd::cibleId::Element);

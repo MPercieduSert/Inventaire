@@ -30,8 +30,8 @@ namespace InfoEntity {
 // Entités de type prédéfinies
 //ID1_ENTITY(cibleGeographie,CibleNumType,InfoEntity::CibleGeographieId,Geo)
 ID1_ENTITY(Etat,IdNullNcNomType,InfoEntity::EtatId,Prog)
-RELATION_ENTITY(Composition,NumTypeValeurDouble,InfoEntity::CompositionId,Col,Ing)
-RELATION_ENTITY(Origine,Type,InfoEntity::OrigineId,Col,Geo)
+RELATION_ENTITY(Composition,NumTypeValeurDouble,InfoEntity::CompositionId,Collection,Ingredient)
+RELATION_ENTITY(Origine,Type,InfoEntity::OrigineId,Collection,Geo)
 using Acquisition = DateTimeValideNcNomTypeEntity<InfoEntity::AcquisitionId>;
 using Collection = NcNomTypeEntity<InfoEntity::CollectionId>;
 using Geographie = NcNomTypeEntity<InfoEntity::GeographieId>;
@@ -55,23 +55,23 @@ public:
                    Id3 = PositionEnum<Id3Attribut,Element>::Position,
                    Num = PositionEnum<NumAttribut,Element>::Position,
                    NbrAtt,
-                   IdCol = Id1,
-                   IdAcq = Id2,
+                   IdCollection = Id1,
+                   IdAcquisition = Id2,
                    IdEtat = Id3,
                    };
 
     using EAID = EntityAttributsID<Attributs<Id1Attribut,Id2Attribut,Id3Attribut,NumAttribut>,InfoEntity::ElementId>;
     using EAID::EntityAttributsID;
     BASE_ENTITY(Element)
-    ALIAS_CLE(Col,1)
-    ALIAS_CLE(Acq,2)
+    ALIAS_CLE(Collection,1)
+    ALIAS_CLE(Acquisition,2)
     ALIAS_CLE(Etat,3)
 
     //! Constructeur à partir d'un jeux de valeurs attributs unique.
     Element(int idCol, int num, int id = 0)
         : EAID(id)
     {
-        setIdCol(idCol);
+        setIdCollection(idCol);
         setNum(num);
     }
 
@@ -79,7 +79,7 @@ public:
     Element(int idAcq, int idCol, int idEtat, int num, int id = 0)
         : Element(idCol,num,id)
     {
-        setIdAcq(idAcq);
+        setIdAcquisition(idAcq);
         setIdEtat(idEtat);
     }
 };
