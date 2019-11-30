@@ -8,26 +8,29 @@
 #include "GestionAutorisationCible.h"
 #include "ManagersPredef.h"
 
-namespace bdd {
-    namespace cibleId {
+namespace bddMPS {
+    namespace cibleIdInv {
         //! Numéro de cible des entités de l'inventaire non prédéfinies.
-        enum EntityInv {Acquisition = NbrCibleEntPredef,
+        enum EntityInv {Acquisition = cibleId::NbrCibleEntPredef,
                         Collection,
                         Composition,
                         Element,
                         Etat,
                         Geographie,
+                        Historique,
                         Ingredient,
                         Origine,
+                        Usage,
                         Valeur,
                        NbrCible};
 }}
 
+namespace inventaireMPS {
+namespace bmps = bddMPS;
 /*! \ingroup groupeManagerInv
  * \brief Managers de l'application inventaire.
  */
-class ManagersInv : public ManagersPredef
-{
+class ManagersInv : public managerMPS::ManagersPredef {
 public:
     //! Constructeur.
     ManagersInv();
@@ -35,5 +38,5 @@ public:
     //! Destructeur.
     ~ManagersInv() = default;
 };
-
+}
 #endif // MANAGERSINV_H

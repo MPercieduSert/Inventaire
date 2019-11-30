@@ -7,14 +7,15 @@
 #include "TabInv.h"
 #include "AbstractTabZoneCentrale.h"
 
+namespace inventaireMPS {
 /*! \ingroup groupeFenInv
  * \brief Zone centrale de l'application inventaire.
  */
-class ZoneCentraleInv : public AbstractTabZoneCentrale
+class ZoneCentraleInv : public fmps::AbstractTabZoneCentrale
 {
 public:
     //! Constructeur.
     explicit ZoneCentraleInv(TabInv * tab = new TabInv, QWidget * parent = nullptr);
 };
-
+}
 #endif // ZONECENTRALEINV_H

@@ -1,23 +1,25 @@
 #include "ConfigInv.h"
 
-bool ConfigInv::creer()
-{
+using namespace inventaireMPS;
+using namespace fichierMPS;
+
+bool ConfigInv::creer() {
     XmlDoc doc;
+    auto iter = doc.begin();
     XmlElement elt;
     elt.setName("conf");
-    doc.addChild(elt);
+    iter = doc.push_back(iter,elt);
     elt.setName("directories");
-    doc.addChild(elt);
+    iter = doc.push_back(iter, elt);
     elt.setName("default");
     elt.setText(QDir::homePath()+"/inventaire/");
-    doc.addChild(elt);
-    doc.toParent();
-    doc.toParent();
+    iter = doc.push_back(iter, elt);
+    iter.toParent(2);
     elt.setName("files");
     elt.setText("");
-    doc.addChild(elt);
+    iter = doc.push_back(iter, elt);
     elt.setName("databases");
-    doc.addChild(elt);
+    doc.push_back(iter, elt);
 
     writeConf(doc);
     return true;

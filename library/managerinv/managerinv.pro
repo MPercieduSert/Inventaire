@@ -6,7 +6,7 @@
 
 QT       += sql
 
-QT       -= gui
+#QT       -= gui
 
 TARGET = managerinv
 TEMPLATE = lib

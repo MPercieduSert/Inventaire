@@ -1,6 +1,7 @@
 QT += widgets sql
 
-CONFIG += c++17 console link_prl
+CONFIG += c++17
+CONFIG += link_prl
 #CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use

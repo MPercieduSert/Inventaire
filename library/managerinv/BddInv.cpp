@@ -1,19 +1,23 @@
 #include "BddInv.h"
 
-void BddInv::listeMiseAJourBdd(int version)
-{
+using namespace inventaireMPS;
+
+void BddInv::listeMiseAJourBdd(int version) {
     BddPredef::listeMiseAJourBdd(version);
     switch (version) {
-    case bdd::bddVersion::initialePredef:
+    case bmps::bddVersion::initialePredef:
         creerTable<Acquisition>();
         creerTable<Collection>();
-        creerTable<Etat>();
-        creerTable<Geographie>();
         creerTable<Ingredient>();
         creerTable<Composition>();
-        creerTable<Origine>();
+        creerTable<Etat>();
         creerTable<Element>();
+        creerTable<Geographie>();
+        creerTable<Usage>();
+        creerTable<Historique>();
+        creerTable<Origine>();
         creerTable<Valeur>();
-        m_manager->saveVersion(bdd::bddVersion::initialeInv);
+
+        m_manager->saveVersion(bmps::bddVersion::initialeInv);
     }
 }

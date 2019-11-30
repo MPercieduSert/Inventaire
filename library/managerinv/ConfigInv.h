@@ -1,5 +1,5 @@
 /*Auteur: PERCIE DU SERT Maxime
- *Date: 27/08/2018
+ *Date: 27/08/2019
  */
 #ifndef CONFIGINV_H
 #define CONFIGINV_H
@@ -16,13 +16,13 @@
  */
 #define DATA_BASE "conf/files/databases/database"
 
+namespace inventaireMPS {
 /*! \ingroup groupeManagerInv
  * \brief Gestionnaire du fichier de configuration.
  *
  * Gestionnaire du fichier de configuration enregistré sous la forme d'un document XML. Tous les noeuds ont des chemins uniques.
  */
-class ConfigInv : public Config
-{
+class ConfigInv : public fichierMPS::Config {
 public:
     using Config::Config;
 
@@ -32,5 +32,5 @@ public:
     //! Renvoie le chemin du dossier par default.
     QString defaultDirectory() override;
 };
-
+}
 #endif // CONFIGINV_H
