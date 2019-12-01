@@ -7,18 +7,18 @@ ManagersInv::ManagersInv()
     : ManagersPredef (infoEntityInv::NbrEntityId,bmps::cibleIdInv::NbrCible,"InventaireVersion") {
     enableRestriction("RestModif");
     enableType("Type","PermType",
-               new GestionAutorisationCibleCode<Type,Restriction>(bmps::cibleId::Type,get<Restriction>()),
-               new GestionAutorisationCibleCode<TypePermission,Restriction>(bmps::cibleId::TypePermission,get<Restriction>()));
+               std::make_unique<GestionAutorisationCibleCode<Type,Restriction>>(bmps::cibleId::Type,get<Restriction>()),
+               std::make_unique<GestionAutorisationCibleCode<TypePermission,Restriction>>(bmps::cibleId::TypePermission,get<Restriction>()));
     enableCommentaire("Commentaire","CbCommentaire");
     enableDonnee("Donnee","ArbDonnee","CbDonnee","CardDonnee",
-                 new GestionAutorisationCibleCode<Donnee,Restriction>(bmps::cibleId::Donnee,get<Restriction>()),
-                 new GestionAutorisationCibleCode<DonneeCible,Restriction>(bmps::cibleId::DonneeCible,get<Restriction>()),
-                 new GestionAutorisationCibleCode<DonneeCard,Restriction>(bmps::cibleId::DonneeCard,get<Restriction>()));
+                 std::make_unique<GestionAutorisationCibleCode<Donnee,Restriction>>(bmps::cibleId::Donnee,get<Restriction>()),
+                 std::make_unique<GestionAutorisationCibleCode<DonneeCible,Restriction>>(bmps::cibleId::DonneeCible,get<Restriction>()),
+                 std::make_unique<GestionAutorisationCibleCode<DonneeCard,Restriction>>(bmps::cibleId::DonneeCard,get<Restriction>()));
     enableHistorique("Historique");
     enableMotCle("MotCle","ArbMotCle","CbMotCle","CbMotProg","PermMotCle","PermMotProg",
-                 new GestionAutorisationCibleCode<MotCle,Restriction>(bmps::cibleId::MotCle,get<Restriction>()),
-                 new GestionAutorisationCibleCode<MotClePermission,Restriction>(bmps::cibleId::MotClePermission,get<Restriction>()),
-                 new GestionAutorisationCibleCode<MotProgPermission,Restriction>(bmps::cibleId::MotProgPermission,get<Restriction>()));
+          std::make_unique<GestionAutorisationCibleCode<MotCle,Restriction>>(bmps::cibleId::MotCle,get<Restriction>()),
+          std::make_unique<GestionAutorisationCibleCode<MotClePermission,Restriction>>(bmps::cibleId::MotClePermission,get<Restriction>()),
+          std::make_unique<GestionAutorisationCibleCode<MotProgPermission,Restriction>>(bmps::cibleId::MotProgPermission,get<Restriction>()));
 
 
     //Acquisition
@@ -30,7 +30,7 @@ ManagersInv::ManagersInv()
     infoAc.setAttribut(Acquisition::Type,"tp");
     infoAc.setUnique(Acquisition::Nom,UniqueAc::NomUnique);
     setTypeForeignKey<Acquisition>(infoAc);
-    setManager(new ManagerSql<Acquisition>(infoAc, new UniqueAc));
+    setManager<Acquisition>(std::make_unique<ManagerSql<Acquisition>>(infoAc, std::make_unique<UniqueAc>()));
     setCible<Acquisition>(bmps::cibleIdInv::Acquisition);
 
     //Collections
@@ -43,9 +43,9 @@ ManagersInv::ManagersInv()
     infoCol.setUnique(Collection::Nom,UniqueCol::NomUnique);
     infoCol.setForeignKey(Collection::Id,infoArbCol);
     setTypeForeignKey<Collection>(infoCol);
-    setManager(new ManagerArbreModifControle<Collection>(infoCol,infoArbCol,
-               new GestionAutorisationCibleCode<Collection,Restriction>(bmps::cibleIdInv::Collection,get<Restriction>()),
-               new UniqueCol));
+    setManager<Collection>(std::make_unique<ManagerArbreModifControle<Collection>>(infoCol,infoArbCol,
+               std::make_unique<GestionAutorisationCibleCode<Collection,Restriction>>(bmps::cibleIdInv::Collection,get<Restriction>()),
+               std::make_unique<UniqueCol>()));
     setCible<Collection>(bmps::cibleIdInv::Collection);
 
     //Ingédient
@@ -58,7 +58,7 @@ ManagersInv::ManagersInv()
     infoIng.setUnique(Ingredient::Nom,UniqueIng::NomUnique);
     infoIng.setForeignKey(Ingredient::Id,infoIng);
     setTypeForeignKey<Ingredient>(infoIng);
-    setManager(new ManagerArbre<Ingredient>(infoIng, infoArbIng, new UniqueIng));
+    setManager<Ingredient>(std::make_unique<ManagerArbre<Ingredient>>(infoIng, infoArbIng, std::make_unique<UniqueIng>()));
     setCible<Ingredient>(bmps::cibleIdInv::Ingredient);
 
     //Composition
@@ -74,7 +74,7 @@ ManagersInv::ManagersInv()
     infoComp.setForeignKey(Composition::IdCollection,infoCol);
     infoComp.setForeignKey(Composition::IdIngredient,infoIng);
     setTypeForeignKey<Composition>(infoComp);
-    setManager(new ManagerSql<Composition>(infoComp, new UniqueComp));
+    setManager<Composition>(std::make_unique<ManagerSql<Composition>>(infoComp, std::make_unique<UniqueComp>()));
     setCible<Composition>(bmps::cibleIdInv::Composition);
 
     //Etat
@@ -89,9 +89,9 @@ ManagersInv::ManagersInv()
     infoEt.setUnique(Etat::Nom,UniqueEt::NomUnique,UniqueEt::NomUniqueSet);
     infoEt.setForeignKey(Etat::Id,infoArbEt);
     setTypeForeignKey<Etat>(infoEt);
-    setManager(new ManagerArbreModifControle<Etat>(infoEt,infoArbEt,
-               new GestionAutorisationCibleCode<Etat,Restriction>(0,get<Restriction>()),
-               new UniqueEt));
+    setManager<Etat>(std::make_unique<ManagerArbreModifControle<Etat>>(infoEt,infoArbEt,
+               std::make_unique<GestionAutorisationCibleCode<Etat,Restriction>>(bmps::cibleIdInv::Etat,get<Restriction>()),
+               std::make_unique<UniqueEt>()));
     setCible<Etat>(bmps::cibleIdInv::Etat);
 
     //Element
@@ -106,7 +106,7 @@ ManagersInv::ManagersInv()
     infoEl.setForeignKey(Element::IdAcquisition,infoAc);
     infoEl.setForeignKey(Element::IdCollection,infoCol);
     infoEl.setForeignKey(Element::IdEtat,infoEt);
-    setManager(new ManagerSql<Element>(infoEl, new UniqueEl));
+    setManager<Element>(std::make_unique<ManagerSql<Element>>(infoEl, std::make_unique<UniqueEl>()));
     setCible<Element>(bmps::cibleIdInv::Element);
 
     //Géographie
@@ -119,7 +119,7 @@ ManagersInv::ManagersInv()
     infoGeo.setUnique(Geographie::Nom,UniqueGeo::NomUnique);
     infoGeo.setForeignKey(Geographie::Id,infoGeo);
     setTypeForeignKey<Geographie>(infoGeo);
-    setManager(new ManagerArbre<Geographie>(infoGeo, infoArbGeo, new UniqueGeo));
+    setManager<Geographie>(std::make_unique<ManagerArbre<Geographie>>(infoGeo, infoArbGeo, std::make_unique<UniqueGeo>()));
     setCible<Geographie>(bmps::cibleIdInv::Geographie);
 
     //Usage
@@ -132,9 +132,9 @@ ManagersInv::ManagersInv()
     infoUs.setUnique(Usage::Nom,UniqueUsage::NomUnique);
     infoUs.setForeignKey(Usage::Id,infoArbUs);
     setTypeForeignKey<Usage>(infoUs);
-    setManager(new ManagerArbreModifControle<Usage>(infoUs,infoArbUs,
-               new GestionAutorisationCibleCode<Usage,Restriction>(bmps::cibleIdInv::Usage,get<Restriction>()),
-               new UniqueUsage));
+    setManager<Usage>(std::make_unique<ManagerArbreModifControle<Usage>>(infoUs,infoArbUs,
+               std::make_unique<GestionAutorisationCibleCode<Usage,Restriction>>(bmps::cibleIdInv::Usage,get<Restriction>()),
+               std::make_unique<UniqueUsage>()));
     setCible<Usage>(bmps::cibleIdInv::Usage);
 
     //Historique
@@ -150,7 +150,7 @@ ManagersInv::ManagersInv()
     infoHisto.setForeignKey(Historique::IdElement,infoEl);
     infoHisto.setForeignKey(Historique::IdEtat,infoEt);
     infoHisto.setForeignKey(Historique::IdUsage,infoUs);
-    setManager(new ManagerSql<Historique>(infoHisto,new UniqueHisto));
+    setManager<Historique>(std::make_unique<ManagerSql<Historique>>(infoHisto,std::make_unique<UniqueHisto>()));
     setCible<Historique>(bmps::cibleIdInv::Historique);
 
     //Origine
@@ -164,7 +164,7 @@ ManagersInv::ManagersInv()
     infoOrg.setForeignKey(Origine::IdCollection,infoCol);
     infoOrg.setForeignKey(Origine::IdGeo,infoGeo);
     setTypeForeignKey<Origine>(infoOrg);
-    setManager(new ManagerSql<Origine>(infoOrg, new UniqueOrg));
+    setManager<Origine>(std::make_unique<ManagerSql<Origine>>(infoOrg, std::make_unique<UniqueOrg>()));
     setCible<Origine>(bmps::cibleIdInv::Origine);
 
     //Valeur
@@ -181,6 +181,6 @@ ManagersInv::ManagersInv()
     infoVal.setUnique(Valeur::Num,UniqueVal::NumUnique);
     infoVal.setUnique(Valeur::Type,UniqueVal::TypeUnique);
     setTypeForeignKey<Valeur>(infoVal);
-    setManager(new ManagerSql<Valeur>(infoVal, new UniqueVal));
+    setManager<Valeur>(std::make_unique<ManagerSql<Valeur>>(infoVal, std::make_unique<UniqueVal>()));
     setCible<Valeur>(bmps::cibleIdInv::Valeur);
 }

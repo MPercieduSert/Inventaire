@@ -24,7 +24,7 @@ public:
 
     //Constructeur.
     BddInv()
-        :BddPredef("QSQLITE",bmps::bddVersion::NbrVersionBddInv - 1, new ManagersInv) {}
+        :BddPredef("QSQLITE",bmps::bddVersion::NbrVersionBddInv - 1, std::make_unique<ManagersInv>()) {}
 
     //! Destructeur. Referme la base de donnée.
     ~BddInv() override = default;

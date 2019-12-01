@@ -19,7 +19,7 @@ namespace inventaireMPS {
 class FenPrincipaleInv : public fmps::FenPrincipale {
 public:
     //! Constructeur.
-    FenPrincipaleInv(NoyauInv * noyau = new NoyauInv, BddInv * bdd = new BddInv, ZoneCentraleInv * centralZone = new ZoneCentraleInv,
+    FenPrincipaleInv(NoyauInv * noyau = new NoyauInv, std::unique_ptr<BddInv> bdd = std::make_unique<BddInv>(), ZoneCentraleInv * centralZone = new ZoneCentraleInv,
                      const QString &bddPathXML = DATA_BASE, const QString & configPath = QDir::currentPath().append("/Config.xml"),
                      QWidget *parent = nullptr);
 };
